@@ -31,4 +31,25 @@ module Percentage
 
   end
 
+  module Fixed
+    def self.percentage(quantity)
+      base_value = 10000.0
+      total_value = base_value * quantity
+      evaluated_value = evaluate(base_value,quantity)
+      ((evaluated_value - total_value)/total_value) * 100.0
+    end
+
+    def self.evaluate(base_value, quantity)
+      slabs = quantity / 1000
+      residue = quantity % 1000
+
+      evaluated_value = (0..slabs-1).inject(Float(0)) do | evaluated_value, value |
+        evaluated_value+= (base_value * 1000) * (1 + (value + 5) / 100.0)
+        evaluated_value
+      end
+      evaluated_value += (base_value * residue) * (1 + (slabs +5 ) / 100.0)
+      return evaluated_value
+    end
+  end
+
 end
